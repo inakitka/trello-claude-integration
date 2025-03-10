@@ -17,31 +17,35 @@ if [ -z "$SMITHERY_PROJECT_ID" ]; then
   exit 1
 fi
 
-# Create deployment package
-echo "Creating deployment package..."
-mkdir -p ./deploy
-cp -r ./smithery ./deploy/
-cp -r ./claude ./deploy/
-cp package.json ./deploy/
+# Check if required files exist
+if [ ! -f "server.js" ]; then
+  echo "Error: server.js file not found"
+  exit 1
+fi
 
-# Install dependencies for production
-echo "Installing production dependencies..."
-cd ./deploy
-npm install --production
-cd ..
+if [ ! -f "Dockerfile" ]; then
+  echo "Error: Dockerfile not found"
+  exit 1
+fi
 
-# Deploy to Smithery.ai
+if [ ! -f "smithery.yaml" ]; then
+  echo "Error: smithery.yaml not found"
+  exit 1
+fi
+
+# Deploy to Smithery.ai using their CLI or API
 echo "Deploying to Smithery.ai..."
+
+# Option 1: Using curl to API (simplified example)
 curl -X POST \
   -H "Authorization: Bearer $SMITHERY_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "{\"projectId\": \"$SMITHERY_PROJECT_ID\", \"source\": \"$(cat ./deploy | base64)\"}" \
+  -d "{\"projectId\": \"$SMITHERY_PROJECT_ID\"}" \
   https://api.smithery.ai/v1/deployments
 
+# Option 2: If Smithery has a CLI tool
+# smithery deploy --project-id $SMITHERY_PROJECT_ID --api-key $SMITHERY_API_KEY
+
 echo "Deployment completed successfully!"
-
-# Cleanup
-echo "Cleaning up..."
-rm -rf ./deploy
-
+echo "Your MCP Server should be available soon at your Smithery.ai project URL."
 echo "Done!" 

@@ -1,0 +1,43 @@
+version: '1'
+name: trello-claude-integration
+description: Интеграция Claude с Trello через MCP Server на базе Smithery.ai
+
+build:
+  dockerfile: Dockerfile
+  context: .
+
+deploy:
+  replicas: 1
+  resources:
+    cpu: 0.5
+    memory: 512Mi
+
+env:
+  - name: NODE_ENV
+    value: production
+  - name: PORT
+    value: "3000"
+  - name: TRELLO_API_KEY
+    secret: TRELLO_API_KEY
+  - name: TRELLO_TOKEN
+    secret: TRELLO_TOKEN
+  - name: CLAUDE_API_KEY
+    secret: CLAUDE_API_KEY
+  - name: SMITHERY_API_KEY
+    secret: SMITHERY_API_KEY
+  - name: SMITHERY_PROJECT_ID
+    secret: SMITHERY_PROJECT_ID
+
+ports:
+  - port: 3000
+    protocol: HTTP
+    public: true
+
+health:
+  path: /health
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+
+logging:
+  level: info 
