@@ -11,6 +11,7 @@ deploy:
   resources:
     cpu: 0.5
     memory: 512Mi
+  command: ["node", "server.js"]
 
 env:
   - name: MCP_MODE
