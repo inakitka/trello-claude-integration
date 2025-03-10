@@ -13,6 +13,8 @@ deploy:
     memory: 512Mi
 
 env:
+  - name: MCP_MODE
+    value: "true"
   - name: NODE_ENV
     value: production
   - name: PORT

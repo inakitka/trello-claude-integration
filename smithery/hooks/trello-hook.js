@@ -5,6 +5,28 @@
  * @param {Object} context - Контекст выполнения
  * @returns {Object} - Результат выполнения
  */
+const util = require('util');
+
+// Определяем, работаем ли мы в режиме MCP сервера
+const isMcpMode = process.env.MCP_MODE === 'true';
+
+// Настраиваем логирование - в режиме MCP выводим логи в STDERR
+const logger = {
+  log: (...args) => {
+    if (isMcpMode) {
+      // В режиме MCP выводим логи в STDERR
+      process.stderr.write(util.format(...args) + '\n');
+    } else {
+      // В обычном режиме используем console.log
+      console.log(...args);
+    }
+  },
+  error: (...args) => {
+    // Ошибки всегда выводим в STDERR
+    process.stderr.write(util.format(...args) + '\n');
+  }
+};
+
 module.exports = async function(request, context) {
   const { action, parameters } = request.body;
   
@@ -18,7 +40,7 @@ module.exports = async function(request, context) {
   
   try {
     // Логирование запроса
-    console.log(`Выполнение действия: ${action} с параметрами:`, parameters);
+    logger.log(`Выполнение действия: ${action} с параметрами:`, parameters);
     
     // Проверка существования действия
     if (!context.actions[action]) {
@@ -32,7 +54,7 @@ module.exports = async function(request, context) {
     const result = await context.actions[action](parameters);
     
     // Логирование успешного результата
-    console.log(`Действие ${action} успешно выполнено:`, result);
+    logger.log(`Действие ${action} успешно выполнено:`, result);
     
     return {
       status: "success",
@@ -40,7 +62,7 @@ module.exports = async function(request, context) {
     };
   } catch (error) {
     // Логирование ошибки
-    console.error(`Ошибка при выполнении действия ${action}:`, error);
+    logger.error(`Ошибка при выполнении действия ${action}:`, error);
     
     return {
       status: "error",

@@ -2,9 +2,30 @@ const express = require('express');
 const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
 
 // Загрузка переменных окружения
 dotenv.config();
+
+// Определяем, работаем ли мы в режиме MCP сервера
+const isMcpMode = process.env.MCP_MODE === 'true';
+
+// Настраиваем логирование - в режиме MCP выводим логи в STDERR
+const logger = {
+  log: (...args) => {
+    if (isMcpMode) {
+      // В режиме MCP выводим логи в STDERR
+      process.stderr.write(util.format(...args) + '\n');
+    } else {
+      // В обычном режиме используем console.log
+      console.log(...args);
+    }
+  },
+  error: (...args) => {
+    // Ошибки всегда выводим в STDERR
+    process.stderr.write(util.format(...args) + '\n');
+  }
+};
 
 // Инициализация приложения Express
 const app = express();
@@ -44,7 +65,7 @@ app.post('/api/trello/action', async (req, res) => {
     const result = await trelloHook(req, { actions: actions });
     res.json(result);
   } catch (error) {
-    console.error('Error processing request:', error);
+    logger.error('Error processing request:', error);
     res.status(500).json({
       status: 'error',
       message: error.message || 'Internal server error',
@@ -61,6 +82,6 @@ app.get('/health', (req, res) => {
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`MCP Server running on port ${PORT}`);
-  console.log(`Loaded actions: ${Object.keys(actions).join(', ')}`);
+  logger.log(`MCP Server running on port ${PORT}`);
+  logger.log(`Loaded actions: ${Object.keys(actions).join(', ')}`);
 }); 
