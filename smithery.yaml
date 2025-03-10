@@ -42,4 +42,9 @@ health:
   timeoutSeconds: 5
 
 logging:
-  level: info 
+  level: info
+
+mcp:
+  enabled: true
+  protocol: json-rpc
+  path: / 
