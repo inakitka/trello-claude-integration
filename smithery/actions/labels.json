@@ -1,0 +1,114 @@
+{
+  "getLabel": {
+    "description": "Получение информации о метке по ID",
+    "parameters": {
+      "labelId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/labels/{{parameters.labelId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "createLabel": {
+    "description": "Создание новой метки на доске",
+    "parameters": {
+      "boardId": { "type": "string", "required": true },
+      "name": { "type": "string", "required": true },
+      "color": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "POST",
+      "url": "https://api.trello.com/1/labels",
+      "params": {
+        "idBoard": "{{parameters.boardId}}",
+        "name": "{{parameters.name}}",
+        "color": "{{parameters.color}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "updateLabel": {
+    "description": "Обновление информации о метке",
+    "parameters": {
+      "labelId": { "type": "string", "required": true },
+      "name": { "type": "string", "required": false },
+      "color": { "type": "string", "required": false }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/labels/{{parameters.labelId}}",
+      "params": {
+        "name": "{{parameters.name}}",
+        "color": "{{parameters.color}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "deleteLabel": {
+    "description": "Удаление метки",
+    "parameters": {
+      "labelId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "DELETE",
+      "url": "https://api.trello.com/1/labels/{{parameters.labelId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "addLabelToCard": {
+    "description": "Добавление метки к карточке",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "labelId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "POST",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}/idLabels",
+      "params": {
+        "value": "{{parameters.labelId}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "removeLabelFromCard": {
+    "description": "Удаление метки с карточки",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "labelId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "DELETE",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}/idLabels/{{parameters.labelId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "findLabelsByName": {
+    "description": "Поиск меток по названию на доске",
+    "parameters": {
+      "boardId": { "type": "string", "required": true },
+      "name": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/boards/{{parameters.boardId}}/labels",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      },
+      "postProcess": "response.data.filter(label => label.name.toLowerCase().includes('{{parameters.name}}'.toLowerCase()))"
+    }
+  }
+} 

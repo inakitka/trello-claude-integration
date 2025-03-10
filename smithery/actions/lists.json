@@ -1,0 +1,118 @@
+{
+  "getList": {
+    "description": "Получение информации о списке по ID",
+    "parameters": {
+      "listId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/lists/{{parameters.listId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "createList": {
+    "description": "Создание нового списка на доске",
+    "parameters": {
+      "name": { "type": "string", "required": true },
+      "boardId": { "type": "string", "required": true },
+      "pos": { "type": "string", "required": false, "default": "bottom" }
+    },
+    "trelloRequest": {
+      "method": "POST",
+      "url": "https://api.trello.com/1/lists",
+      "params": {
+        "name": "{{parameters.name}}",
+        "idBoard": "{{parameters.boardId}}",
+        "pos": "{{parameters.pos}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "updateList": {
+    "description": "Обновление информации о списке",
+    "parameters": {
+      "listId": { "type": "string", "required": true },
+      "name": { "type": "string", "required": false },
+      "closed": { "type": "boolean", "required": false },
+      "pos": { "type": "string", "required": false },
+      "subscribed": { "type": "boolean", "required": false }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/lists/{{parameters.listId}}",
+      "params": {
+        "name": "{{parameters.name}}",
+        "closed": "{{parameters.closed}}",
+        "pos": "{{parameters.pos}}",
+        "subscribed": "{{parameters.subscribed}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "moveList": {
+    "description": "Перемещение списка на другую доску",
+    "parameters": {
+      "listId": { "type": "string", "required": true },
+      "boardId": { "type": "string", "required": true },
+      "pos": { "type": "string", "required": false, "default": "bottom" }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/lists/{{parameters.listId}}/idBoard",
+      "params": {
+        "value": "{{parameters.boardId}}",
+        "pos": "{{parameters.pos}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "archiveList": {
+    "description": "Архивирование списка",
+    "parameters": {
+      "listId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/lists/{{parameters.listId}}/closed",
+      "params": {
+        "value": "true",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "getCardsInList": {
+    "description": "Получение всех карточек в списке",
+    "parameters": {
+      "listId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/lists/{{parameters.listId}}/cards",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "sortList": {
+    "description": "Сортировка карточек в списке",
+    "parameters": {
+      "listId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "POST",
+      "url": "https://api.trello.com/1/lists/{{parameters.listId}}/sortCards",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  }
+} 

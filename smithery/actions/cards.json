@@ -1,0 +1,204 @@
+{
+  "createCard": {
+    "description": "Создание новой карточки в указанном списке",
+    "parameters": {
+      "listId": { "type": "string", "required": true },
+      "name": { "type": "string", "required": true },
+      "desc": { "type": "string", "required": false },
+      "due": { "type": "string", "required": false },
+      "idLabels": { "type": "array", "required": false },
+      "idMembers": { "type": "array", "required": false },
+      "pos": { "type": "string", "required": false }
+    },
+    "trelloRequest": {
+      "method": "POST",
+      "url": "https://api.trello.com/1/cards",
+      "params": {
+        "idList": "{{parameters.listId}}",
+        "name": "{{parameters.name}}",
+        "desc": "{{parameters.desc}}",
+        "due": "{{parameters.due}}",
+        "idLabels": "{{parameters.idLabels}}",
+        "idMembers": "{{parameters.idMembers}}",
+        "pos": "{{parameters.pos}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "getCard": {
+    "description": "Получение данных карточки по её ID",
+    "parameters": {
+      "cardId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "updateCard": {
+    "description": "Обновление данных карточки",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "name": { "type": "string", "required": false },
+      "desc": { "type": "string", "required": false },
+      "due": { "type": "string", "required": false },
+      "idList": { "type": "string", "required": false },
+      "idLabels": { "type": "array", "required": false },
+      "idMembers": { "type": "array", "required": false },
+      "pos": { "type": "string", "required": false },
+      "closed": { "type": "boolean", "required": false }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}",
+      "params": {
+        "name": "{{parameters.name}}",
+        "desc": "{{parameters.desc}}",
+        "due": "{{parameters.due}}",
+        "idList": "{{parameters.idList}}",
+        "idLabels": "{{parameters.idLabels}}",
+        "idMembers": "{{parameters.idMembers}}",
+        "pos": "{{parameters.pos}}",
+        "closed": "{{parameters.closed}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "deleteCard": {
+    "description": "Удаление карточки",
+    "parameters": {
+      "cardId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "DELETE",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "moveCardToList": {
+    "description": "Перемещение карточки в другой список",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "listId": { "type": "string", "required": true },
+      "pos": { "type": "string", "required": false }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}",
+      "params": {
+        "idList": "{{parameters.listId}}",
+        "pos": "{{parameters.pos}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "addLabelToCard": {
+    "description": "Добавление метки к карточке",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "labelId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "POST",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}/idLabels",
+      "params": {
+        "value": "{{parameters.labelId}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "removeLabelFromCard": {
+    "description": "Удаление метки с карточки",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "labelId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "DELETE",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}/idLabels/{{parameters.labelId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "addMemberToCard": {
+    "description": "Добавление участника к карточке",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "memberId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "POST",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}/idMembers",
+      "params": {
+        "value": "{{parameters.memberId}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "removeMemberFromCard": {
+    "description": "Удаление участника с карточки",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "memberId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "DELETE",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}/idMembers/{{parameters.memberId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "setCardDueDate": {
+    "description": "Установка срока для карточки",
+    "parameters": {
+      "cardId": { "type": "string", "required": true },
+      "due": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/cards/{{parameters.cardId}}",
+      "params": {
+        "due": "{{parameters.due}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "searchCards": {
+    "description": "Поиск карточек по запросу",
+    "parameters": {
+      "query": { "type": "string", "required": true },
+      "boardId": { "type": "string", "required": false },
+      "idList": { "type": "string", "required": false },
+      "modelTypes": { "type": "string", "required": false, "default": "cards" }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/search",
+      "params": {
+        "query": "{{parameters.query}}",
+        "idBoards": "{{parameters.boardId}}",
+        "idCards": "{{parameters.idCards}}",
+        "modelTypes": "{{parameters.modelTypes}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  }
+} 

@@ -1,0 +1,119 @@
+{
+  "getMember": {
+    "description": "Получение информации о пользователе по ID",
+    "parameters": {
+      "memberId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/members/{{parameters.memberId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "getCurrentMember": {
+    "description": "Получение информации о текущем пользователе",
+    "parameters": {},
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/members/me",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "getMemberBoards": {
+    "description": "Получение досок, с которыми связан пользователь",
+    "parameters": {
+      "memberId": { "type": "string", "required": true },
+      "filter": { "type": "string", "required": false, "default": "all" }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/members/{{parameters.memberId}}/boards",
+      "params": {
+        "filter": "{{parameters.filter}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "getMemberCards": {
+    "description": "Получение карточек, назначенных пользователю",
+    "parameters": {
+      "memberId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/members/{{parameters.memberId}}/cards",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "getMemberOrganizations": {
+    "description": "Получение организаций, с которыми связан пользователь",
+    "parameters": {
+      "memberId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/members/{{parameters.memberId}}/organizations",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "findMemberByUsername": {
+    "description": "Поиск пользователя по имени пользователя",
+    "parameters": {
+      "username": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "GET",
+      "url": "https://api.trello.com/1/search/members",
+      "params": {
+        "query": "{{parameters.username}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "removeMemberFromBoard": {
+    "description": "Удаление участника с доски",
+    "parameters": {
+      "boardId": { "type": "string", "required": true },
+      "memberId": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "DELETE",
+      "url": "https://api.trello.com/1/boards/{{parameters.boardId}}/members/{{parameters.memberId}}",
+      "params": {
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  },
+  "updateMemberBoardRole": {
+    "description": "Изменение роли участника на доске",
+    "parameters": {
+      "boardId": { "type": "string", "required": true },
+      "memberId": { "type": "string", "required": true },
+      "type": { "type": "string", "required": true }
+    },
+    "trelloRequest": {
+      "method": "PUT",
+      "url": "https://api.trello.com/1/boards/{{parameters.boardId}}/members/{{parameters.memberId}}",
+      "params": {
+        "type": "{{parameters.type}}",
+        "key": "{{env.TRELLO_API_KEY}}",
+        "token": "{{env.TRELLO_TOKEN}}"
+      }
+    }
+  }
+} 
