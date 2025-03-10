@@ -16,6 +16,7 @@ EXPOSE 3000
 
 # Установка переменной окружения для режима MCP
 ENV MCP_MODE=true
+ENV NODE_ENV=production
 
-# Запуск приложения напрямую через node
+# Запуск приложения
 CMD ["node", "server.js"] 

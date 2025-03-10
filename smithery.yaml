@@ -6,35 +6,40 @@ build:
   dockerfile: Dockerfile
   context: .
 
-deploy:
-  replicas: 1
-  resources:
-    cpu: 0.5
-    memory: 512Mi
-  command: ["node", "server.js"]
-
-env:
-  - name: MCP_MODE
-    value: "true"
-  - name: NODE_ENV
-    value: production
-  - name: PORT
-    value: "3000"
-  - name: TRELLO_API_KEY
-    secret: TRELLO_API_KEY
-  - name: TRELLO_TOKEN
-    secret: TRELLO_TOKEN
-  - name: CLAUDE_API_KEY
-    secret: CLAUDE_API_KEY
-  - name: SMITHERY_API_KEY
-    secret: SMITHERY_API_KEY
-  - name: SMITHERY_PROJECT_ID
-    secret: SMITHERY_PROJECT_ID
-
-ports:
-  - port: 3000
-    protocol: HTTP
-    public: true
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      trelloApiKey:
+        type: string
+        description: "API ключ Trello"
+      trelloToken:
+        type: string
+        description: "Токен доступа Trello"
+      claudeApiKey:
+        type: string
+        description: "API ключ Claude"
+      port:
+        type: number
+        description: "Порт для запуска сервера"
+        default: 3000
+    required: ["trelloApiKey", "trelloToken"]
+  commandFunction: |
+    function(config) {
+      return {
+        command: "node",
+        args: ["server.js"],
+        env: {
+          MCP_MODE: "true",
+          NODE_ENV: "production",
+          PORT: config.port || 3000,
+          TRELLO_API_KEY: config.trelloApiKey,
+          TRELLO_TOKEN: config.trelloToken,
+          CLAUDE_API_KEY: config.claudeApiKey || ""
+        }
+      };
+    }
 
 health:
   path: /health
